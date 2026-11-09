@@ -1,0 +1,65 @@
+---
+import Section from "./Section.astro";
+import Button from "./Button.astro";
+import BookButton from "./BookButton.astro";
+import Plus from "./Plus.astro";
+import { firstVisit, nb, viber } from "./content";
+---
+<Section id="first-visit" class="band band--field">
+  <div class="container">
+    <div class="fv">
+      <div class="fv__col">
+        <h2>{nb("Що ви отримаєте за перший візит")}</h2>
+        <ol class="addends">
+          {firstVisit.map((text, i) => (
+            <li data-reveal style={`--reveal-delay:calc(${i} * var(--stagger))`}>
+              <span class="addend">{nb(text)}</span>
+              {i < firstVisit.length - 1 && <Plus class="addend__plus" size={20} />}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="sum">
+        <p class="sum__total tabular"><span class="sum__eq">= 499</span>{" "}<span class="sum__unit">грн</span></p>
+        <p class="sum__old">Замість <s class="tabular">1 000 грн</s></p>
+      </div>
+    </div>
+    <div class="sum__foot">
+      <p>{nb("Якщо є знімки МРТ чи рентген, візьміть із собою.")}</p>
+      <div class="sum__actions">
+        <BookButton mobileCall />
+        <Button href={viber} variant="outline" icon="message">Viber</Button>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .addends { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-4); margin-top: var(--sp-40); }
+  .addends li { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-4); min-width: 0; max-width: 100%; }
+  .addend { display: block; padding: var(--sp-12) var(--sp-24); background: var(--color-bg); border-radius: var(--radius); font: 700 var(--text-h3)/1.1 var(--font-display); max-width: 35rem; }
+  :global(.addend__plus) { flex-shrink: 0; margin-left: var(--sp-24); }
+  .sum { display: flex; align-items: flex-end; gap: var(--sp-16) var(--sp-40); flex-wrap: wrap; margin-top: var(--sp-64); }
+  .sum__total { font: 700 var(--text-numeral)/.9 var(--font-display); max-width: none; white-space: nowrap; }
+  .sum__unit { font-size: .55em; }
+  .sum__old { font: 700 var(--text-h3)/1 var(--font-display); padding-bottom: var(--sp-12); }
+  .sum__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-16) var(--sp-40); margin-top: var(--sp-40); }
+  .sum__actions { display: flex; flex-wrap: wrap; gap: var(--sp-8); }
+
+  /* The total sits beside the column, level with its last row. */
+  @media (min-width: 1280px) {
+    .fv { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--sp-64); align-items: end; }
+    .sum { margin-top: 0; flex-direction: column; align-items: flex-start; gap: var(--sp-8); }
+    .fv__col { max-width: 35rem; }
+    .sum__total { font-size: min(calc(35.6vw - 290px), 14rem); }
+  }
+
+  @media (max-width: 719px) {
+    .addends { align-items: stretch; }
+    :global(.addend__plus) { margin-left: var(--sp-16); }
+    .addend { padding: var(--sp-12) var(--sp-16); max-width: none; }
+    .sum { margin-top: var(--sp-40); }
+    .sum__actions { width: 100%; }
+    .sum__actions :global(.btn) { width: 100%; }
+  }
+</style>

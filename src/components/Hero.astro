@@ -1,0 +1,84 @@
+---
+import Section from "./Section.astro";
+import Button from "./Button.astro";
+import CallButton from "./CallButton.astro";
+import { address, hours, telegram, viber } from "./content";
+---
+<Section id="hero" rec="R-002,R-004,R-006,GA-R007,MA-R002">
+  <div class="hero">
+    <div class="container hero__grid">
+      {/* One h1 with real spaces between parts, so its text stays exact when segments split. */}
+      <h1 class="hero__h1">
+        <span class="line" style="--i:0"><span class="part" style="--j:0">Кінезіотерапія</span>{" "}<span class="part" style="--j:1">у Львові</span></span>{" "}
+        <span class="line" style="--i:1"><span class="part" style="--j:2">без осьового</span>{" "}<span class="part" style="--j:3">навантаження</span></span>{" "}
+        <span class="line line--short" style="--i:2"><span class="part" style="--j:4">на хребет</span></span>
+      </h1>
+
+      <div class="anchor on-dark" data-hero-anchor style="--i:3">
+        <div class="anchor__offer">
+          <p class="anchor__name">Консультація + пробне заняття</p>
+          <p class="anchor__price">
+            <span class="anchor__sum tabular">499 грн</span>
+            <span class="anchor__old">замість <s class="tabular">1 000 грн</s></span>
+          </p>
+        </div>
+        <div class="anchor__actions">
+          <CallButton tone="dark" rec="R-001" class="anchor__call" numberOnNarrow />
+          <Button href={viber} variant="outline" tone="dark" icon="message" class="anchor__viber">Viber</Button>
+          <Button href={telegram} variant="outline" tone="dark" class="anchor__telegram" external>Telegram</Button>
+        </div>
+      </div>
+    </div>
+
+    <p class="container hero__meta">
+      <a class="link" href="#contacts">{address}</a>
+      <span>{hours}</span>
+    </p>
+  </div>
+</Section>
+
+<style>
+  .hero { overflow-x: clip; padding-block: var(--sp-24) var(--sp-40); }
+  .hero__grid { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: repeat(3, auto); gap: var(--seg-gap); }
+  .hero__h1 { grid-column: 1 / -1; grid-row: 1 / -1; display: grid; grid-template-columns: subgrid; grid-template-rows: subgrid; font-size: var(--text-display); line-height: 1.05; max-width: none; text-wrap: initial; }
+  .line { grid-column: 1 / -1; position: relative; width: fit-content; max-width: 100%; padding: .07em var(--sp-24) .09em 0; background: var(--color-accent); border-radius: 0 var(--radius) var(--radius) 0; animation: unclench 600ms var(--ease-out) both; }
+  .line::before { content: ""; position: absolute; top: 0; bottom: 0; right: 100%; width: 200rem; background: inherit; }
+  .line--short { grid-column: 1; align-self: start; }
+  .anchor { grid-column: 2; grid-row: 3; min-width: 0; position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-16) var(--sp-24); padding: var(--sp-16) 0 var(--sp-16) var(--sp-24); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius) 0 0 var(--radius); animation: unclench 600ms var(--ease-out) both; }
+  .anchor::after { content: ""; position: absolute; top: 0; bottom: 0; left: 100%; width: 200rem; background: inherit; }
+  .anchor__name { font-weight: 600; }
+  .anchor__price { display: flex; align-items: baseline; gap: var(--sp-12); flex-wrap: wrap; margin-top: var(--sp-4); }
+  .anchor__sum { font: 700 var(--text-h2)/1 var(--font-display); }
+  .anchor__old { color: var(--color-muted-on-dark); font-size: var(--text-caption); }
+  .anchor__actions { display: flex; gap: var(--sp-8); flex-wrap: wrap; }
+  .anchor__actions :global(.btn) { padding-inline: var(--sp-16); }
+  .hero__meta { display: flex; flex-wrap: wrap; gap: var(--sp-8) var(--sp-24); margin-top: var(--sp-16); font-size: var(--text-caption); max-width: var(--container); }
+
+  @keyframes unclench { from { transform: translateY(calc(var(--i, 0) * var(--seg-gap) * -1)); } to { transform: none; } }
+
+  @media (max-width: 1179px) {
+    .hero__grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+    .hero__h1 { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; gap: var(--seg-gap); }
+    .line--short { grid-column: 1; }
+    .anchor { grid-column: 1; grid-row: 2; border-radius: var(--radius) 0 0 var(--radius); }
+  }
+
+  @media (max-width: 719px) {
+    .hero { padding-top: var(--sp-8); }
+    .hero__h1 { font-size: var(--text-display); }
+    .line { display: contents; animation: none; }
+    .line::before { content: none; }
+    .part { display: block; padding: var(--sp-8) var(--sp-16); background: var(--color-accent); border-radius: var(--radius); animation: unclench-mobile 600ms var(--ease-out) both; }
+    .anchor { flex-direction: column; align-items: stretch; gap: var(--sp-12); padding: var(--sp-16); border-radius: var(--radius); }
+    .anchor::after { content: none; }
+    .anchor__actions { flex-direction: column; }
+    .anchor__sum { font-size: 3rem; }
+    .anchor :global(.anchor__telegram) { display: none; }
+    .anchor :global(.anchor__call), .anchor :global(.anchor__viber) { width: 100%; }
+    @keyframes unclench-mobile { from { transform: translateY(calc(var(--j, 0) * var(--seg-gap) * -1)); } to { transform: none; } }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .line, .part, .anchor { animation: none; }
+  }
+</style>

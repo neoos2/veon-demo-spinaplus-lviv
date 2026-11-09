@@ -1,0 +1,23 @@
+---
+// The page's one main action: the number on desktop, the word on a phone (both open the same tel: link).
+import Button from "./Button.astro";
+import { phone } from "./content";
+interface Props { tone?: "light" | "dark"; block?: boolean; rec?: string; class?: string; numberOnNarrow?: boolean; }
+const { tone = "light", block = false, rec, class: cls, numberOnNarrow = false } = Astro.props;
+---
+<Button href={phone.href} tone={tone} icon="phone" block={block} rec={rec} class={cls}>
+  <span class="call__wide tabular">{phone.label}</span>
+  <span class="call__narrow">
+    <span>Зателефонувати</span>
+    {numberOnNarrow && <span class="call__num tabular">{phone.label}</span>}
+  </span>
+</Button>
+
+<style>
+  .call__narrow { display: none; }
+  @media (max-width: 719px) {
+    .call__wide { display: none; }
+    .call__narrow { display: inline-flex; flex-direction: column; align-items: flex-start; }
+    .call__num { font-size: var(--text-caption); font-weight: 400; }
+  }
+</style>

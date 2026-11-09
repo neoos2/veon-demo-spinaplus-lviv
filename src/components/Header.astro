@@ -1,0 +1,95 @@
+---
+import Button from "./Button.astro";
+import { address, hours, nav, phone, telegram, viber } from "./content";
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+---
+<header class="header">
+  <div class="container header__row">
+    <a class="header__logo" href="#top" aria-label="Spina+ на початок сторінки">
+      <img src={`${base}images/logo.svg`} width="140" height="38" alt="Spina+" />
+    </a>
+
+    <div class="header__seg on-dark">
+      <nav class="header__nav" aria-label="Розділи сторінки">
+        <ul>
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+      <a class="header__phone tabular" href={phone.href} data-rec="R-001">{phone.label}</a>
+      <Button href="#contacts" tone="dark" class="header__cta">Записатися</Button>
+
+      <a class="header__iconbtn" href={phone.href} aria-label={`Зателефонувати ${phone.label}`}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.2 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z" /></svg>
+      </a>
+
+      <details class="menu" data-menu>
+        <summary class="menu__toggle">Меню</summary>
+        <div class="menu__panel">
+          <nav aria-label="Меню">
+            <ul class="menu__list">
+              {nav.map((item) => <li><a class="menu__seg" href={item.href}>{item.label}</a></li>)}
+            </ul>
+          </nav>
+          <div class="menu__contacts">
+            <a class="menu__phone tabular" href={phone.href}>{phone.label}</a>
+            <div class="menu__msg">
+              <Button href={viber} variant="outline" icon="message" block>Viber</Button>
+              <Button href={telegram} variant="outline" block external>Telegram</Button>
+            </div>
+            <p>{address}</p>
+            <p>{hours}</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>("[data-menu]");
+  if (menu) {
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => { menu.open = false; }));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary")?.focus(); } });
+  }
+</script>
+
+<style>
+  .header { position: sticky; top: 0; z-index: 300; background: var(--color-bg); }
+  .header__row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-16); min-height: var(--header-bar); }
+  .header__logo { display: block; flex-shrink: 0; width: 140px; }
+  .header__logo:hover { opacity: .85; }
+  .header__seg { display: flex; align-items: center; gap: var(--sp-24); min-height: 56px; padding: var(--sp-4) var(--sp-8) var(--sp-4) var(--sp-24); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius); }
+  .header__nav ul { display: flex; gap: var(--sp-24); }
+  .header__nav a { font-size: var(--text-caption); text-decoration: none; padding-block: var(--sp-8); border-bottom: 1px solid transparent; transition: border-color var(--dur-micro) var(--ease-out); white-space: nowrap; }
+  .header__nav a:hover { border-bottom-color: currentColor; }
+  .header__phone { font: 600 var(--text-body)/1 var(--font-body); color: inherit; text-decoration: none; white-space: nowrap; }
+  .header__phone:hover { text-decoration: underline; text-underline-offset: .2em; }
+  .header__iconbtn { display: none; align-items: center; justify-content: center; width: 48px; height: 48px; color: inherit; border-radius: var(--radius-btn); transition: background-color var(--dur-micro) var(--ease-out); }
+  .header__iconbtn:hover { background: var(--color-text-hover); }
+  .menu { display: none; }
+  .menu__toggle { display: flex; align-items: center; min-height: 48px; padding: 0 var(--sp-16); font: 600 var(--text-body)/1 var(--font-body); cursor: pointer; list-style: none; border-radius: var(--radius-btn); transition: background-color var(--dur-micro) var(--ease-out); }
+  .menu__toggle::-webkit-details-marker { display: none; }
+  .menu__toggle:hover { background: var(--color-text-hover); }
+  .menu__panel { position: fixed; inset: var(--header-bar) 0 0 0; padding: var(--sp-16) var(--sp-16) var(--sp-40); background: var(--color-bg); color: var(--color-text); overflow-y: auto; overscroll-behavior: contain; }
+  .menu__list { display: flex; flex-direction: column; gap: var(--seg-gap); }
+  .menu__seg { display: flex; align-items: center; min-height: 64px; padding: 0 var(--sp-16); background: var(--color-accent); color: var(--color-text); border-radius: var(--radius); font: 700 var(--text-h3)/1 var(--font-display); text-decoration: none; white-space: nowrap; }
+  .menu__seg:hover { background: var(--color-accent-hover); }
+  .menu__contacts { display: flex; flex-direction: column; gap: var(--sp-12); margin-top: var(--sp-24); font-size: var(--text-caption); }
+  .menu__phone { font: 700 var(--text-h2)/1 var(--font-display); color: inherit; text-decoration: none; white-space: nowrap; }
+  .menu__msg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-8); }
+
+  @media (max-width: 1179px) {
+    .header__nav, .header__phone, .header__seg :global(.header__cta) { display: none; }
+    .header__iconbtn { display: flex; }
+    .menu { display: block; }
+    .header__seg { padding: var(--sp-4); gap: var(--sp-4); }
+  }
+  /* Phone: once the hero offer is gone the bottom bar owns the call action, one call per screen. */
+  @media (max-width: 719px) {
+    :global(.past-hero) .header__iconbtn { display: none; }
+  }
+  @media (max-width: 400px) {
+    .header__logo { width: 112px; }
+    .header__logo img { width: 112px; height: auto; }
+  }
+</style>

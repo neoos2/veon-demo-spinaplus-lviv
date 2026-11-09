@@ -1,0 +1,74 @@
+/* Hallmark · shape: stacked segments · genre: modern-minimal · theme: custom · job: book · idea: "A column of segments with visible space between them: the page does to its content what the method does to the spine" · vibe: "calm, exact, brand-blue, typographic"
+ * paper: #F4F3ED · accent: #47A7D8 · display: Fira Sans Extra Condensed · body: Golos Text · hero: H1 as three blue segments bleeding off the left edge, dark offer segment beside the third · nav: logo on cream, dark segment with anchors, number and action · footer: cream, logo, contacts, future links, caution · imagery: none · signature: the headline column opens up and choosing a zone pushes its neighbours apart
+ * axes: cream/condensed/blue · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: imagery, no verified photo of the Lviv hall exists, so the composition is carried by type and real numbers */
+/* Hallmark · waive 23 · accent ~32% of the fold · posture Committed, concept.md section 5: brand blue is the surface, 35-45% of the first screen */
+/* Hallmark · waive 26b · no :disabled styling · demo has no form controls; inactive items use FutureLink aria-disabled */
+/* Hallmark · waive 39b · .zone__btn 80px · zone choosers are the concept's stacked segments, not ordinary buttons */
+/* Hallmark · waive 44c · hero ends near 626px at 1440x900 · concept caps H1 at 115px and the next block is meant to start in view */
+/* Hallmark · waive 59 · section gap under 120px · concept.md 8.2 and design system: surfaces are segments separated by a 24px gap */
+/* Hallmark · waive 72 · .line left 0 at 720px and up · on those widths the segment continues past the viewport edge through ::before, so the text is not at the box edge; phone segments are padded 16px */
+/* Client design tokens from design/concept.md (veon-concept, design system for FULL). */
+:root {
+  --color-bg: #F4F3ED;
+  --color-text: #122833;
+  --color-accent: #47A7D8;
+  --color-panel: #E6E5DC;
+  --color-muted: #3F5661;
+  --color-muted-on-dark: #B7C6CD;
+  --color-text-hover: color-mix(in srgb, var(--color-text) 86%, var(--color-accent));
+  --color-accent-ink: var(--color-text);
+  --color-accent-hover: color-mix(in srgb, var(--color-accent) 78%, var(--color-bg));
+  --font-display: "Fira Sans Extra Condensed", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Golos Text", system-ui, sans-serif;
+  --text-display: min(8vw, 115px);
+  --text-numeral: min(clamp(7rem, 20vw, 16rem), 29vw);
+  --text-h2: clamp(2.75rem, 1.9rem + 3.4vw, 4rem);
+  --text-h3: clamp(1.75rem, 1.6rem + 0.6vw, 2.125rem);
+  --text-body: 1.125rem;
+  --text-caption: 1rem;
+  --text-list: 1.5rem;
+  --sp-4: 4px;
+  --sp-8: 8px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-24: 24px;
+  --sp-40: 40px;
+  --sp-64: 64px;
+  --sp-96: 96px;
+  --sp-144: 144px;
+  --seg-gap: 16px;
+  --edge: 16px;
+  --radius: 16px;
+  --radius-btn: 12px;
+  --radius-section: 32px;
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 420ms;
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --stagger: 50ms;
+  --space: clamp(1rem, -0.4rem + 5.55vw, 3.75rem);
+  --container: 1320px;
+  --header-bar: 72px;
+  --header-h: 88px;
+}
+@media (max-width: 1320px) {
+  :root { --text-display: 7.6vw; }
+}
+@media (max-width: 719px) {
+  :root {
+    --text-display: min(calc(16.2vw - 9px), 5.25rem);
+    --seg-gap: 8px;
+    --edge: 8px;
+    --radius-section: 20px;
+    --stagger: 30ms;
+    --text-list: 1.375rem;
+  }
+}
+
+@font-face { font-family: "Fira Sans Extra Condensed"; font-style: normal; font-weight: 700; font-display: swap; src: url("../assets/fonts/fira-sans-extra-condensed-cyrillic-700-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Fira Sans Extra Condensed"; font-style: normal; font-weight: 700; font-display: swap; src: url("../assets/fonts/fira-sans-extra-condensed-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Golos Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fonts/golos-text-cyrillic-400-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Golos Text"; font-style: normal; font-weight: 400; font-display: swap; src: url("../assets/fonts/golos-text-latin-400-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Golos Text"; font-style: normal; font-weight: 600; font-display: swap; src: url("../assets/fonts/golos-text-cyrillic-600-normal.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Golos Text"; font-style: normal; font-weight: 600; font-display: swap; src: url("../assets/fonts/golos-text-latin-600-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }

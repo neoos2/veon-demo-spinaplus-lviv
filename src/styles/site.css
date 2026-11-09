@@ -1,0 +1,46 @@
+/* Client layer on top of the neutral base: type roles, section surfaces, focus and FutureLink look. */
+html { overflow-x: clip; scrollbar-color: var(--color-muted) var(--color-panel); }
+body { overflow-x: clip; font-size: var(--text-body); font-synthesis: none; }
+::selection { background: var(--color-accent); color: var(--color-accent-ink); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.05; letter-spacing: 0; margin: 0; color: inherit; }
+h2 { font-size: var(--text-h2); max-width: 22ch; }
+h3 { font-size: var(--text-h3); max-width: 30ch; }
+p { margin: 0; max-width: 62ch; }
+ul, ol, dl, dd { margin: 0; padding: 0; list-style: none; }
+
+:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; }
+.band--dark :focus-visible, .on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--color-bg); }
+
+.band { margin: 0 var(--edge) var(--sp-24); padding-block: var(--sp-96); border-radius: var(--radius-section); }
+.band--dark { background: var(--color-text); color: var(--color-bg); }
+.band--field { background: var(--color-accent); color: var(--color-accent-ink); }
+.band--plain { padding-block: var(--sp-64); }
+.tabular { font-variant-numeric: tabular-nums; }
+.nowrap { white-space: nowrap; }
+
+/* Text link in the current colour. */
+.link { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; transition: text-decoration-thickness var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out); }
+.link:hover { text-decoration-thickness: 2px; }
+.link:active { opacity: .7; }
+
+/* Number that belongs to the page's pre-disclosed FutureLink: quiet, not a broken link. */
+.future-link { gap: var(--sp-8); padding-block: var(--sp-4); color: var(--color-muted); cursor: not-allowed; border-bottom: 1px dashed currentColor; width: fit-content; }
+.band--dark .future-link, .on-dark .future-link { color: var(--color-muted-on-dark); }
+.future-link__note[aria-hidden="true"] { left: 0; top: auto; bottom: calc(100% + var(--sp-8)); transform: translate(0, 4px); padding: var(--sp-8) var(--sp-12); font-size: var(--text-caption); }
+.future-link:hover .future-link__note, .future-link:focus-visible .future-link__note, .future-link:focus .future-link__note { opacity: 1; transform: translate(0, 0); }
+.future-link:focus-visible { outline-offset: 4px; }
+
+@media (max-width: 719px) {
+  body { padding-bottom: 88px; }
+  .band { padding-block: var(--sp-64); }
+  .band--plain { padding-block: var(--sp-40); }
+}
+/* Script-dependent hidden states stay here so they read as .js-scoped (content is visible without JS). */
+.js .strip:not(.is-visible) .strip__seg { opacity: 0; transform: translateY(8px); }
+@media (max-width: 719px) {
+  .js .bar:not(.is-shown) { transform: translateY(calc(100% + var(--sp-16))); visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { transition-delay: 0ms !important; }
+}

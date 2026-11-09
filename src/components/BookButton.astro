@@ -1,0 +1,21 @@
+---
+// Mid-page action: "Записатися" to the contacts block on wider screens (tel: often has nowhere to open there),
+// a real call on a phone only where `mobileCall` is set; elsewhere the phone bottom bar covers the call.
+import Button from "./Button.astro";
+import { phone } from "./content";
+interface Props { mobileCall?: boolean; }
+const { mobileCall = false } = Astro.props;
+---
+<span class="book">
+  <Button href="#contacts" class="book__wide">Записатися</Button>
+  {mobileCall && <Button href={phone.href} icon="phone" class="book__narrow" callTarget>Зателефонувати</Button>}
+</span>
+
+<style>
+  .book { display: contents; }
+  .book :global(.book__narrow) { display: none; }
+  @media (max-width: 719px) {
+    .book :global(.book__wide) { display: none; }
+    .book :global(.book__narrow) { display: inline-flex; }
+  }
+</style>

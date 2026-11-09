@@ -1,0 +1,107 @@
+---
+import Section from "./Section.astro";
+import BookButton from "./BookButton.astro";
+import Plus from "./Plus.astro";
+import FutureLink from "./FutureLink.astro";
+import { futureNote, nb, zones } from "./content";
+const total = zones.reduce((sum, z) => sum + z.items.length, 0);
+---
+<Section id="conditions" rec="R-003">
+  <div class="conditions container">
+    <h2>{nb(`${total} станів, з якими приходять`)}</h2>
+    <div class="zones" data-zones>
+      {zones.map((zone, i) => {
+        const n = zone.items.length;
+        return (
+          <div class:list={["zone", { "is-active": i === 0 }]} data-zone>
+            <button type="button" class="zone__btn" style={`--w:${46 + (54 * n) / 9}%`} aria-expanded={i === 0 ? "true" : "false"} aria-controls={`zone-${zone.id}`} id={`zone-btn-${zone.id}`} data-zone-btn>
+              <span>{zone.name}</span><span class="zone__meta"><span class="zone__n tabular">{n}</span><Plus size={18} class="zone__plus" /></span>
+            </button>
+            <div class="zone__panel" id={`zone-${zone.id}`} data-zone-panel>
+              <h3 class="zone__title">{zone.name}</h3>
+              <ul class="zone__list">
+                {zone.items.map((item) => <li>{item}</li>)}
+              </ul>
+              {zone.extra && <p class="zone__extra">{nb(zone.extra)}</p>}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+    <div class="conditions__foot">
+      <p>{nb("Не знайшли свій стан? Зателефонуйте, фахівець підкаже")}</p>
+      <div class="conditions__actions">
+        <BookButton />
+        <FutureLink note={futureNote}>Сторінки станів</FutureLink>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-zones]");
+  if (root) {
+    const zones = Array.from(root.querySelectorAll<HTMLElement>("[data-zone]"));
+    const activate = (index: number) => {
+      zones.forEach((zone, i) => {
+        const on = i === index;
+        const btn = zone.querySelector("[data-zone-btn]");
+        const panel = zone.querySelector<HTMLElement>("[data-zone-panel]");
+        zone.classList.toggle("is-active", on);
+        zone.classList.toggle("is-before", i < index);
+        zone.classList.toggle("is-after", i > index);
+        btn?.setAttribute("aria-expanded", String(on));
+        if (panel) panel.hidden = !on;
+      });
+    };
+    zones.forEach((zone, i) => zone.querySelector("[data-zone-btn]")?.addEventListener("click", () => activate(i)));
+    activate(0);
+  }
+</script>
+
+<style>
+  .conditions { padding-block: var(--sp-96) var(--sp-96); }
+  .zones { margin-top: var(--sp-40); display: flex; flex-direction: column; gap: var(--sp-40); }
+  .zone__btn { display: none; align-items: center; justify-content: space-between; gap: var(--sp-16); width: 100%; min-height: 72px; padding: var(--sp-12) var(--sp-24); border: 0; background: var(--color-accent); color: var(--color-text); border-radius: var(--radius); font: 700 var(--text-h3)/1.1 var(--font-display); text-align: left; cursor: pointer; transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out), transform var(--dur-short) var(--ease-out); }
+  .zone__btn:hover { background: var(--color-accent-hover); }
+  .zone__btn:active { transform: translateY(1px); }
+  .zone__meta { display: inline-flex; align-items: center; gap: var(--sp-12); }
+  .zone__n { font-size: var(--text-h3); }
+  :global(.zone__plus) { flex-shrink: 0; transition: transform var(--dur-short) var(--ease-out); }
+  .zone.is-active :global(.zone__plus) { transform: rotate(45deg); }
+  .zone.is-active .zone__btn { background: var(--color-text); color: var(--color-bg); }
+  .zone__list { display: flex; flex-direction: column; gap: var(--sp-12); margin-top: var(--sp-12); font-size: var(--text-list); line-height: 1.3; font-family: var(--font-body); font-weight: 400; }
+  .zone__extra { margin-top: var(--sp-16); }
+  .zone__title { font-size: var(--text-h3); margin-bottom: var(--sp-4); }
+  .conditions__foot { margin-top: var(--sp-64); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-16) var(--sp-40); }
+  .conditions__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-24); }
+
+  :global(.js) .zone__btn { display: flex; }
+  :global(.js) .zone__title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :global(.js) .zone__panel { animation: fade 180ms var(--ease-out) both; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (min-width: 900px) {
+    :global(.js) .zones { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: repeat(5, auto); column-gap: var(--sp-64); row-gap: var(--seg-gap); padding-block: var(--sp-12); }
+    :global(.js) .zone { display: contents; }
+    :global(.js) .zone__btn { grid-column: 1; width: var(--w); }
+    :global(.js) .zone__panel { grid-column: 2; grid-row: 1 / span 5; align-self: start; }
+    :global(.js) .zone__list { gap: var(--sp-12); margin-top: 0; }
+    :global(.js) .zone.is-before .zone__btn { transform: translateY(-12px); }
+    :global(.js) .zone.is-after .zone__btn { transform: translateY(12px); }
+  }
+
+  @media (max-width: 899px) {
+    :global(.js) .zones { gap: var(--seg-gap); }
+    :global(.js) .zone__panel { padding: var(--sp-16) var(--sp-16) var(--sp-24); }
+    .zone__btn { min-height: 64px; }
+  }
+  @media (max-width: 719px) {
+    .conditions { padding-block: var(--sp-64); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .zone__panel { animation: none; }
+    :global(.zone__plus) { transition: none; }
+    .zone__btn:active { transform: none; }
+  }
+</style>

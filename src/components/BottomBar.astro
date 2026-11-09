@@ -1,0 +1,50 @@
+---
+import Button from "./Button.astro";
+import { phone, telegram, viber } from "./content";
+---
+<div class="bar on-dark" data-rec="R-005" data-bar>
+  <Button href={phone.href} tone="dark" icon="phone" block class="bar__call">Зателефонувати</Button>
+  <Button href={viber} variant="outline" tone="dark" icon="message" class="bar__viber">Viber</Button>
+  <Button href={telegram} variant="outline" tone="dark" class="bar__telegram" external>Telegram</Button>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>("[data-bar]");
+  const anchor = document.querySelector("[data-hero-anchor]");
+  const targets = document.querySelectorAll("[data-hero-anchor], [data-call-target]");
+  if (bar && anchor && "IntersectionObserver" in window) {
+    // One call per screen: the bar shows only while no block with its own call is in view.
+    // Top margin = header height: a block tucked under the sticky header no longer counts as visible.
+    const headerHeight = document.querySelector("header")?.getBoundingClientRect().height ?? 72;
+    const inView = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) inView.add(e.target);
+        else inView.delete(e.target);
+      }
+      bar.classList.toggle("is-shown", inView.size === 0);
+      document.documentElement.classList.toggle("past-hero", !inView.has(anchor));
+    }, { rootMargin: `-${Math.round(headerHeight)}px 0px 0px 0px` });
+    targets.forEach((t) => io.observe(t));
+  } else {
+    bar?.classList.add("is-shown");
+  }
+</script>
+
+<style>
+  .bar { display: none; }
+  @media (max-width: 719px) {
+    .bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 200; display: flex; gap: var(--sp-8); padding: var(--sp-8) var(--sp-8) calc(var(--sp-8) + env(safe-area-inset-bottom)); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius) var(--radius) 0 0; }
+    :global(.js) .bar { transition: transform var(--dur-short) var(--ease-out), visibility var(--dur-short); }
+    :global(.bar__call) { flex: 1 1 auto; min-width: 0; }
+    :global(.bar__viber), :global(.bar__telegram) { flex: 0 0 auto; }
+    .bar :global(.btn) { min-height: 48px; padding-inline: var(--sp-8); font-size: var(--text-caption); }
+  }
+  /* Three actions must fit a 320px phone: icons give way first. */
+  @media (max-width: 379px) {
+    .bar :global(.btn__icon) { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .bar { transition: none; }
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+import Section from "./Section.astro";
+import Button from "./Button.astro";
+import { hours, mapUrl, nb, phone, telegram, viber } from "./content";
+---
+<Section id="contacts" class="band band--dark" rec="R-003,R-004">
+  <div class="container contacts">
+    <h2 class="contacts__h">Стрийська, 45</h2>
+    <div class="contacts__grid">
+      <div class="contacts__where">
+        <p>{nb("ТОЦ «Fabrik», межа Франківського та Сихівського районів, власний паркінг.")}</p>
+        <p>{hours}</p>
+        <p>Приймаємо дорослих і дітей.</p>
+      </div>
+      <div class="contacts__act">
+        <a class="contacts__phone tabular" href={phone.href} data-rec="R-001" data-call-target>{phone.label}</a>
+        <div class="contacts__btns">
+          <Button href={viber} variant="outline" tone="dark" icon="message">Viber</Button>
+          <Button href={telegram} variant="outline" tone="dark" external>Telegram</Button>
+          <Button href={mapUrl} variant="outline" tone="dark" external rec="R-007">Відкрити на карті</Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .contacts__h { font-size: var(--text-display); max-width: none; line-height: 1; }
+  .contacts__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--sp-40) var(--sp-64); margin-top: var(--sp-40); }
+  .contacts__where { display: flex; flex-direction: column; gap: var(--sp-8); }
+  .contacts__act { display: flex; flex-direction: column; gap: var(--sp-16); align-items: flex-start; }
+  .contacts__phone { font: 700 var(--text-h2)/1 var(--font-display); color: inherit; text-decoration: none; white-space: nowrap; transition: color var(--dur-micro) var(--ease-out); }
+  .contacts__phone:hover { color: var(--color-accent); }
+  .contacts__btns { display: flex; flex-wrap: wrap; gap: var(--sp-8); }
+  @media (max-width: 719px) {
+    .contacts__grid { grid-template-columns: minmax(0, 1fr); }
+    .contacts__btns { width: 100%; }
+    .contacts__btns :global(.btn) { flex: 1 1 calc(50% - var(--sp-8)); }
+  }
+</style>

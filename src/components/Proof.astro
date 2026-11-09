@@ -1,0 +1,51 @@
+---
+import Section from "./Section.astro";
+import BookButton from "./BookButton.astro";
+import { nb } from "./content";
+---
+<Section id="proof">
+  <div class="proof">
+    <div class="proof__inner">
+      <h2>{nb("Що пишуть після консультації")}</h2>
+      <div class="proof__quotes">
+        <figure class="quote quote--big" data-reveal>
+          <blockquote>{nb("«Консультацію провели компетентно, все розповіли, де проблемні м’язи та спазми, чому болить, протестували на занятті.»")}</blockquote>
+          <figcaption>Євгенія Кириченко, відгук із сайту</figcaption>
+        </figure>
+        <figure class="quote" data-reveal style="--reveal-delay:calc(1 * var(--stagger))">
+          <blockquote>{nb("«Щиро вдячний всьому персоналу центру Spina+ за щирість, доброзичливість, гарний настрій та чудовий сервіс!»")}</blockquote>
+          <figcaption>Igor Dmytrienko, відгук із сайту</figcaption>
+        </figure>
+      </div>
+      <div class="proof__foot">
+        <div class="proof__facts">
+          <p><strong class="tabular">4.8</strong> за даними Google, вказано на сайті</p>
+          <p>{nb("У мережі, за даними компанії, 75\u00a0000+ пацієнтів і 150+ спеціалістів.")}</p>
+        </div>
+        <BookButton />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .proof { margin-right: clamp(16px, 8vw, 144px); margin-bottom: var(--sp-24); background: var(--color-panel); border-radius: 0 var(--radius-section) var(--radius-section) 0; padding-block: var(--sp-96); }
+  .proof__inner { width: min(100% - 2 * var(--space), var(--container)); margin-inline: auto; padding-right: var(--sp-24); }
+  .proof__quotes { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: var(--sp-40) var(--sp-64); margin-top: var(--sp-40); align-items: end; }
+  .quote { margin: 0; }
+  blockquote { margin: 0; font-size: var(--text-body); }
+  .quote--big blockquote { font: 700 var(--text-h3)/1.2 var(--font-display); }
+  figcaption { margin-top: var(--sp-12); font-size: var(--text-caption); color: var(--color-muted); }
+  .proof__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-16) var(--sp-40); margin-top: var(--sp-64); }
+  .proof__facts { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .proof__facts strong { font: 700 var(--text-h3)/1 var(--font-display); }
+
+  @media (max-width: 899px) {
+    .proof__quotes { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 719px) {
+    .proof { padding-block: var(--sp-64); margin-right: var(--sp-16); }
+    .proof__foot { margin-top: var(--sp-40); }
+    .proof__foot :global(.btn) { width: 100%; }
+  }
+</style>

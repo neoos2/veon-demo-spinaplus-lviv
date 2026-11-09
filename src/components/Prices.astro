@@ -1,0 +1,94 @@
+---
+import Section from "./Section.astro";
+import BookButton from "./BookButton.astro";
+import FutureLink from "./FutureLink.astro";
+import Plus from "./Plus.astro";
+import { futureNote, nb, packages } from "./content";
+const max = Math.max(...packages.map((p) => p.n));
+---
+<Section id="prices">
+  <div class="prices container">
+    <h2>{nb("Скільки коштує почати і продовжити")}</h2>
+    <div class="prices__grid">
+      <div class="entry">
+        <dl class="entry__list">
+          <div>
+            <dt>Перший візит</dt>
+            <dd class="entry__sum tabular">499 грн</dd>
+          </div>
+          <div>
+            <dt>Одне заняття</dt>
+            <dd class="entry__sum tabular">750 грн</dd>
+          </div>
+        </dl>
+        <BookButton />
+      </div>
+      <div class="packages">
+        <p class="packages__note">У кожному пакеті 10 масажів по 30 хв</p>
+        <ul class="packages__list">
+          {packages.map((p, i) => (
+            <li class="pack" style={`--n:${p.n};--max:${max};--reveal-delay:calc(${i} * var(--stagger))`} data-reveal>
+              <span class="pack__label">{p.n} {p.unit}</span>
+              <span class="pack__bar" aria-hidden="true"></span>
+              <span class="pack__price tabular">{p.price}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="discount">
+      <p class="discount__seg">{nb("−50\u00a0% на кінезіотерапію для учасників бойових дій")}</p>
+      <details class="perks">
+        <summary><span>Пільги</span><Plus size={18} class="perks__plus" /></summary>
+        <div class="perks__body">
+          <p>{nb("Окремі умови діють для пенсіонерів, дітей до 18 років, багатодітних сімей, АТО, ВПО, Чорнобиль, людей з інвалідністю, а також сімейні абонементи.")}</p>
+          <p>{nb("Знижки не сумуються з акційними пропозиціями та між собою і рахуються від повної вартості занять.")}</p>
+        </div>
+      </details>
+      <FutureLink note={futureNote} class="discount__future">Повний прайс</FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .prices { padding-block: var(--sp-96); }
+  .prices__grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--sp-40) var(--sp-96); margin-top: var(--sp-40); align-items: start; }
+  .entry { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-24); }
+  .entry__list { display: flex; flex-direction: column; gap: var(--sp-16); }
+  .entry dt { font-size: var(--text-caption); color: var(--color-muted); }
+  .entry__sum { font: 700 var(--text-h2)/1 var(--font-display); }
+  .packages__note { font-size: var(--text-caption); color: var(--color-muted); margin-bottom: var(--sp-16); }
+  .packages__list { display: flex; flex-direction: column; gap: var(--seg-gap); }
+  .pack { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: var(--sp-16); }
+  .pack__bar { grid-area: 1 / 1; height: 56px; width: calc(var(--n) / var(--max) * 100%); background: var(--color-accent); border-radius: var(--radius); }
+  .pack__label { grid-area: 1 / 1; position: relative; padding-left: var(--sp-16); font: 700 var(--text-h3)/1 var(--font-display); align-self: center; z-index: 1; white-space: nowrap; }
+  .pack__price { grid-area: 1 / 2; font: 700 var(--text-h3)/1 var(--font-display); text-align: right; white-space: nowrap; }
+  .discount { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: var(--sp-16) var(--sp-96); margin-top: var(--sp-64); align-items: start; }
+  .discount__seg { grid-column: 1 / -1; width: fit-content; max-width: 100%; padding: var(--sp-12) var(--sp-24); background: var(--color-text); color: var(--color-bg); border-radius: var(--radius); font: 700 var(--text-h3)/1.15 var(--font-display); }
+  :global(.discount__future) { grid-column: 1; grid-row: 2; align-self: center; }
+  .perks { grid-column: 2; grid-row: 2; }
+  .perks summary { display: inline-flex; align-items: center; gap: var(--sp-12); min-height: 48px; font-weight: 600; cursor: pointer; list-style: none; border-bottom: 1px solid currentColor; }
+  .perks summary::-webkit-details-marker { display: none; }
+  .perks summary:hover :global(.perks__plus) { color: var(--color-muted); }
+  :global(.perks__plus) { transition: transform var(--dur-short) var(--ease-out); flex-shrink: 0; }
+  .perks[open] :global(.perks__plus) { transform: rotate(45deg); }
+  .perks__body { display: flex; flex-direction: column; gap: var(--sp-12); margin-top: var(--sp-12); }
+
+  @media (max-width: 899px) {
+    .prices__grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-40); }
+    .discount { grid-template-columns: minmax(0, 1fr); margin-top: var(--sp-40); }
+    :global(.discount__future), .perks { grid-column: 1; grid-row: auto; }
+  }
+  @media (max-width: 719px) {
+    .prices { padding-block: var(--sp-64); }
+    .pack { grid-template-columns: minmax(0, 1fr) auto; row-gap: var(--sp-4); }
+    .pack__label { grid-area: 1 / 1; padding-left: 0; }
+    .pack__price { grid-area: 1 / 2; }
+    .pack__bar { grid-area: 2 / 1 / 2 / 3; height: 24px; border-radius: var(--radius-btn); }
+    .entry :global(.btn) { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.perks__plus) { transition: none; }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import Section from "./Section.astro";
+import Button from "./Button.astro";
+import Plus from "./Plus.astro";
+import { nb, roles } from "./content";
+const sessions = Array.from({ length: 12 }, (_, i) => i + 1);
+---
+<Section id="method" class="band band--dark">
+  <div class="container">
+    <div class="method__intro">
+      <h2>{nb("Кожна вправа — на декомпресійному тренажері")}</h2>
+      <div class="method__text">
+        <p>{nb("Осьове навантаження — це тиск уздовж хребта, коли ви стоїте або піднімаєте вагу. На тренажерах вправи виконують без нього.")}</p>
+        <p>{nb("Заняття йдуть під контролем фахівця, навантаження коригують.")}</p>
+      </div>
+    </div>
+
+    <ol class="strip" data-reveal aria-hidden="true">
+      {sessions.map((n) => (
+        <li class:list={["strip__seg", { "strip__seg--check": n % 3 === 0 }]} style={`--n:${n - 1}`}>
+          {n % 3 === 0 && (
+            <>
+              <Plus size={16} />
+              <span class="strip__n tabular">{n}</span>
+              <span class="strip__word">огляд</span>
+            </>
+          )}
+        </li>
+      ))}
+    </ol>
+    <div class="method__rhythm">
+      <h3>{nb("Кожне третє заняття — знову огляд")}</h3>
+      <p>{nb("Після кожних трьох занять — повторна консультація і діагностика. В абонементі на 12 занять — 4 огляди.")}</p>
+    </div>
+
+    <ul class="roles">
+      {roles.map((role, i) => (
+        <li data-reveal style={`--reveal-delay:calc(${i} * var(--stagger))`}>
+          <h3 class="role__name">{role.name}</h3>
+          <p>{nb(role.text)}</p>
+        </li>
+      ))}
+    </ul>
+
+    <div class="method__foot">
+      <p>{nb("Чи підійде вам цей метод, вирішує фахівець на консультації.")}</p>
+      <Button href="#first-visit" tone="dark">Склад першого візиту</Button>
+    </div>
+  </div>
+</Section>
+
+<style>
+  .method__intro { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--sp-24) var(--sp-64); align-items: end; }
+  .method__text { display: flex; flex-direction: column; gap: var(--sp-12); }
+  .strip { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--sp-8); margin-top: var(--sp-64); }
+  .strip__seg { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--sp-4); height: 128px; background: var(--color-accent); color: var(--color-text); border-radius: var(--radius-btn); }
+  .strip__seg--check { background: var(--color-bg); }
+  .strip__n { font: 700 var(--text-h3)/1 var(--font-display); }
+  .strip__word { font-size: var(--text-caption); line-height: 1.1; }
+  .method__rhythm { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--sp-16) var(--sp-64); margin-top: var(--sp-24); align-items: start; }
+  .method__rhythm p { color: var(--color-muted-on-dark); }
+  .roles { display: flex; flex-direction: column; gap: var(--seg-gap); margin-top: var(--sp-64); }
+  .roles li { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: var(--sp-8) var(--sp-64); }
+  .role__name { font-size: var(--text-h3); color: var(--color-accent); }
+  .method__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-16) var(--sp-40); margin-top: var(--sp-64); }
+
+  /* Strip animates its own segments; the wrapper itself must not fade (overrides the base reveal). */
+  :global(.js) .strip[data-reveal]:not(.is-visible) { opacity: 1; transform: none; }
+  .strip__seg { transition: opacity 60ms var(--ease-out), transform 60ms var(--ease-out); transition-delay: calc(var(--n) * 40ms); }
+
+  @media (max-width: 719px) {
+    .method__intro, .method__rhythm { grid-template-columns: minmax(0, 1fr); }
+    .strip { gap: var(--sp-4); margin-top: var(--sp-40); }
+    .strip__seg { height: 72px; border-radius: var(--sp-8); }
+    .strip__seg :global(svg) { width: 12px; height: 12px; }
+    .strip__n { font-size: var(--text-caption); }
+    .strip__word { display: none; }
+    .roles { margin-top: var(--sp-40); }
+    .roles li { grid-template-columns: minmax(0, 1fr); gap: var(--sp-8); padding-bottom: var(--sp-8); }
+    .method__foot { margin-top: var(--sp-40); }
+    .method__foot :global(.btn) { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .strip__seg { transition: none; }
+  }
+</style>
